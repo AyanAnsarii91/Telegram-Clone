@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import API_URL from "../config/api";
 import socket from "../socket";
 
 function Chat() {
@@ -54,7 +55,7 @@ function Chat() {
 
             try {
                 const response = await fetch(
-                    `http://localhost:5000/api/messages/${currentUser.id}/${selectedUser._id}`
+                    `${API_URL}/api/messages/${currentUser.id}/${selectedUser._id}`
                 );
                 const data = await response.json();
                 console.log("📦 Conversation Loaded:", data);
@@ -71,7 +72,7 @@ function Chat() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch("http://localhost:5000/api/users");
+                const response = await fetch(`${API_URL}/api/users`);
                 const data = await response.json();
                 setUsers(data);
             } catch (error) {
@@ -102,13 +103,13 @@ function Chat() {
         formData.append("avatar", file);
 
         try {
-            const uploadResponse = await fetch("http://localhost:5000/api/upload/avatar", {
+            const uploadResponse = await fetch(`${API_URL}/api/upload/avatar`, {
                 method: "POST",
                 body: formData,
             });
             const uploadData = await uploadResponse.json();
 
-            await fetch(`http://localhost:5000/api/users/avatar/${currentUser.id}`, {
+            await fetch(`${API_URL}/api/users/avatar/${currentUser.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

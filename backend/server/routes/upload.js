@@ -22,14 +22,17 @@ const upload = multer({
   storage,
 });
 
+const getServerUrl = () =>
+  process.env.SERVER_URL ||
+  process.env.RENDER_EXTERNAL_URL ||
+  `http://localhost:${process.env.PORT || 5000}`;
+
 router.post(
   "/avatar",
   upload.single("avatar"),
   (req, res) => {
     res.json({
-      imageUrl:
-        "http://localhost:5000/uploads/" +
-        req.file.filename,
+      imageUrl: `${getServerUrl()}/uploads/${req.file.filename}`,
     });
   }
 );

@@ -20,7 +20,24 @@ const uploadRoutes = require("./routes/upload");
 const app = express();
 
 // Global Middleware
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://telegram-clone-ra5s.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, true);
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // Static Files
@@ -51,7 +68,8 @@ const onlineUsers = {};
 // Socket.IO Server
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: allowedOrigins,
+    credentials: true,
   },
 });
 
@@ -128,7 +146,13 @@ io.on("connection", (socket) => {
   });
 });
 
-// Start Backend Server
-server.listen(5000, "0.0.0.0", () => {
-  console.log("🚀 Server Running on Port 5000");
+// // Start Backend Server
+// server.listen(5000, "0.0.0.0", () => {
+//   console.log("🚀 Server Running on Port 5000");
+// });
+
+const PORT = process.env.PORT || 5000;
+
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Server Running on Port ${PORT}`);
 });
