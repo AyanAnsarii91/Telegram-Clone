@@ -1,10 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Chat from "./pages/Chat";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import GuestRoute from "./components/GuestRoute";
+import { isAuthenticated } from "./utils/auth";
 
 function App() {
   return (
@@ -14,13 +16,21 @@ function App() {
         {/* Login */}
         <Route
           path="/"
-          element={<Login />}
+          element={
+            <GuestRoute>
+              <Login />
+            </GuestRoute>
+          }
         />
 
         {/* Register */}
         <Route
           path="/register"
-          element={<Register />}
+          element={
+            <GuestRoute>
+              <Register />
+            </GuestRoute>
+          }
         />
 
         {/* Protected Chat */}
@@ -30,6 +40,16 @@ function App() {
             <ProtectedRoute>
               <Chat />
             </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to={isAuthenticated() ? "/chat" : "/"}
+              replace
+            />
           }
         />
 

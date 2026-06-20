@@ -1,9 +1,9 @@
 import { Navigate } from "react-router-dom";
 
-function ProtectedRoute({ children }) {
-  const user = localStorage.getItem("user");
+import { isAuthenticated } from "../utils/auth";
 
-  if (!user) {
+function ProtectedRoute({ children }) {
+  if (!isAuthenticated()) {
     return <Navigate to="/" replace />;
   }
 

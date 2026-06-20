@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import API_URL from "../config/api";
+import { saveAuth } from "../utils/auth";
 
 function Login() {
   const navigate = useNavigate();
@@ -43,16 +44,7 @@ function Login() {
         return;
       }
 
-      // Save Auth Data
-      localStorage.setItem(
-        "token",
-        data.token
-      );
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data.user)
-      );
+      saveAuth(data.token, data.user);
 
       console.log("✅ Login Success");
 

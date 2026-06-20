@@ -25,7 +25,9 @@ export default defineConfig({
 
         display: "standalone",
 
-        start_url: "/",
+        start_url: "/chat",
+
+        scope: "/",
 
         icons: [
           {

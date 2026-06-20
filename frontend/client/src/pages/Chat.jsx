@@ -1,5 +1,6 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import API_URL from "../config/api";
+import { clearAuth, getStoredUser } from "../utils/auth";
 import socket from "../socket";
 
 function Chat() {
@@ -9,9 +10,7 @@ function Chat() {
     const [selectedUser, setSelectedUser] = useState(null);
     const [showChat, setShowChat] = useState(false);
     const [onlineUsers, setOnlineUsers] = useState([]);
-
-    // Get current user efficiently (prevents parsing on every render)
-    const currentUser = useMemo(() => JSON.parse(localStorage.getItem("user")) || null, []);
+    const [currentUser, setCurrentUser] = useState(() => getStoredUser());
 
     // Send Message
     const sendMessage = () => {
@@ -231,8 +230,7 @@ function Chat() {
 
                         <button
                             onClick={() => {
-                                localStorage.removeItem("token");
-                                localStorage.removeItem("user");
+                                clearAuth();
                                 window.location.href = "/";
                             }}
                             className="bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition px-4 py-2 rounded-lg text-sm font-semibold border border-red-500/50"
